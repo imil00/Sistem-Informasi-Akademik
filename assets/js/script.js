@@ -51,6 +51,56 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Sidebar toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggler = document.querySelector('.navbar-toggler[data-bs-target="#sidebarMenu"]');
+    const sidebar = document.getElementById('sidebarMenu');
+    const backdrop = document.createElement('div');
+    backdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(backdrop);
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('show');
+        backdrop.classList.toggle('show');
+    }
+
+    if (sidebarToggler) {
+        sidebarToggler.addEventListener('click', toggleSidebar);
+    }
+
+    backdrop.addEventListener('click', toggleSidebar);
+
+    // Close sidebar when clicking on nav links in mobile
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 768) {
+                toggleSidebar();
+            }
+        });
+    });
+
+    // Adjust main content margin when sidebar is open
+    function adjustMainContent() {
+        const main = document.querySelector('main');
+        if (window.innerWidth < 768 && sidebar.classList.contains('show')) {
+            main.style.marginLeft = '250px';
+        } else {
+            main.style.marginLeft = '0';
+        }
+    }
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            sidebar.classList.remove('show');
+            backdrop.classList.remove('show');
+        }
+        adjustMainContent();
+    });
+
+    adjustMainContent();
+});
+
 // Search functionality
 function searchTable(inputId, tableId) {
     const input = document.getElementById(inputId);
